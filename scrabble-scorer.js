@@ -33,26 +33,72 @@ function oldScrabbleScorer(word) {
 // don't change the names or your program won't work as expected. //
 
 function initialPrompt() {
-   console.log("Let's play some scrabble! Enter a word:");
-};
+   return input.question("Let's play some scrabble! Enter a word: ");
+}
 
-let simpleScore;
+function simpleScore(word) {
+  return word.replace(/[^a-zA-Z]+/g, "").length;
+}
 
-let vowelBonusScore;
+function vowelBonusScore(word) {
+  let vowels = word.replace(/[^aeiouAEIOU]+/g, "").length;
+  let consonants = word.replace(/[^a-zA-Z]+/g, "").replace(/[aeiouAEIOU]+/g, "").length;
+  return (vowels * 3) + consonants;
+}
 
-let scrabbleScore;
+function scrabbleScore(word) {
+  word = word.replace(/[^a-zA-Z]+/g, "").toUpperCase();
+	let letterPoints = 0;
+	for (let i = 0; i < word.length; i++) {
+    letter = word[i];
+    letterPoints += Number(newPointStructure[letter]);
+  }
+  return letterPoints;
+}
 
-const scoringAlgorithms = [];
+const scoringAlgorithms = [
+  {
+    name: "Simple Score",
+    description: "Each letter is worth 1 point.",
+    scorerFunction: simpleScore
+  },
+  {
+    name: "Bonus Vowels",
+    description: "Vowels are 3 pts, consonants are 1 pt.",
+    scorerFunction: vowelBonusScore
+  },
+  {
+    name: "Scrabble",
+    description: "Each letter is worth 1 point.",
+    scorerFunction: scrabbleScore
+  }
+];
 
-function scorerPrompt() {}
+function scorerPrompt(word) {
+  let userScoring = 3;
+  console.log(`Scoring options:\n\t0) Simple score\n\t1) Bonus Vowels\n\t2) Scrabble`);
+  while (userScoring > 2) {
+    userScoring = input.question(`How do you want to score that word? `);
+  }
+  console.log(`Your word scored ${scoringAlgorithms[userScoring].scorerFunction(word)} points!`);
+  return scoringAlgorithms[userScoring];
+}
 
-function transform() {};
+let newPointStructure = transform(oldPointStructure);;
 
-let newPointStructure;
+function transform(obj) {
+  let newArray = [];
+  for (scoreArray in obj) {
+    for (letter of obj[scoreArray]) {
+      newArray[letter] = scoreArray;
+    }
+  }
+  return newArray;
+}
 
 function runProgram() {
-   initialPrompt();
-   
+  let userWord = initialPrompt();
+  scorerPrompt(userWord);
 }
 
 // Don't write any code below this line //
