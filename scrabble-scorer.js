@@ -94,7 +94,7 @@ function transform(obj) {
   let newArray = [];
   for (scoreArray in obj) {
     for (letter of obj[scoreArray]) {
-      newArray[letter.toLowerCase()] = scoreArray;
+      newArray[letter.toLowerCase()] = Number(scoreArray);
     }
   }
   return newArray;
@@ -102,7 +102,7 @@ function transform(obj) {
 
 function runProgram() {
   let userWord = initialPrompt();
-  scorerPrompt(userWord);
+  scorerPrompt(userWord); 
 }
 
 // Don't write any code below this line //
