@@ -47,7 +47,7 @@ function vowelBonusScore(word) {
 }
 
 function scrabbleScore(word) {
-  word = word.replace(/[^a-zA-Z]+/g, "").toUpperCase();
+  word = word.replace(/[^a-zA-Z]+/g, "").toLowerCase();
 	let letterPoints = 0;
 	for (let i = 0; i < word.length; i++) {
     letter = word[i];
@@ -75,22 +75,26 @@ const scoringAlgorithms = [
 ];
 
 function scorerPrompt(word) {
-  let userScoring = 3;
+  let userScoring;
   console.log(`Which scoring algorithm would you like to use?\n\n0 - Simple: One point per character\n1 - Vowel Bonus: Vowels are worth 3 points\n2 - Scrabble: Uses scrabble point system`);
-  while (userScoring > 2) {
+
+  do {
     userScoring = input.question(`Enter 0, 1, or 2: `);
-  }
+    userScoring = Math.floor(Number(userScoring));
+    if (userScoring === 0 || userScoring === 1 || userScoring === 2) { break; }
+  } while (true);
+
   console.log(`Score for '${word}': ${scoringAlgorithms[userScoring].scorerFunction(word)}`);
   return scoringAlgorithms[userScoring];
 }
 
-let newPointStructure = transform(oldPointStructure);;
+let newPointStructure = transform(oldPointStructure);
 
 function transform(obj) {
   let newArray = [];
   for (scoreArray in obj) {
     for (letter of obj[scoreArray]) {
-      newArray[letter] = scoreArray;
+      newArray[letter.toLowerCase()] = scoreArray;
     }
   }
   return newArray;
