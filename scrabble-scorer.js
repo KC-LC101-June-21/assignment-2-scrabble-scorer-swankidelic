@@ -37,13 +37,13 @@ function initialPrompt() {
 }
 
 function simpleScore(word) {
-  return word.replace(/[^a-zA-Z]+/g, "").length;
+  return Number(word.replace(/[^a-zA-Z]+/g, "").length);
 }
 
 function vowelBonusScore(word) {
   let vowels = word.replace(/[^aeiouAEIOU]+/g, "").length;
   let consonants = word.replace(/[^a-zA-Z]+/g, "").replace(/[aeiouAEIOU]+/g, "").length;
-  return (vowels * 3) + consonants;
+  return Number((vowels * 3) + consonants);
 }
 
 function scrabbleScore(word) {
@@ -53,24 +53,24 @@ function scrabbleScore(word) {
     letter = word[i];
     letterPoints += Number(newPointStructure[letter]);
   }
-  return letterPoints;
+  return Number(letterPoints);
 }
 
 const scoringAlgorithms = [
   {
     name: "Simple Score",
     description: "Each letter is worth 1 point.",
-    scorerFunction: simpleScore
+    scoringFunction: simpleScore
   },
   {
     name: "Bonus Vowels",
     description: "Vowels are 3 pts, consonants are 1 pt.",
-    scorerFunction: vowelBonusScore
+    scoringFunction: vowelBonusScore
   },
   {
     name: "Scrabble",
     description: "Each letter is worth 1 point.",
-    scorerFunction: scrabbleScore
+    scoringFunction: scrabbleScore
   }
 ];
 
@@ -84,7 +84,7 @@ function scorerPrompt(word) {
     if (userScoring === 0 || userScoring === 1 || userScoring === 2) { break; }
   } while (true);
 
-  console.log(`Score for '${word}': ${scoringAlgorithms[userScoring].scorerFunction(word)}`);
+  console.log(`Score for '${word}': ${scoringAlgorithms[userScoring].scoringFunction(word)}`);
   return scoringAlgorithms[userScoring];
 }
 
